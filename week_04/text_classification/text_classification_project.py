@@ -10,6 +10,13 @@ from web_scrapping import extract_songs
 dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
 data_folder = os.path.realpath(dir_path+"../"+"data/") + "/"
 
+def ngram_type(s):
+    try:
+        x, y = map(int, s.split(','))
+        return (x, y)
+    except:
+        raise argparse.ArgumentTypeError("Coordinates must be x,y,z")
+
 if __name__ == "__main__":
 
     # Setup the command line arguements
@@ -19,13 +26,20 @@ if __name__ == "__main__":
 
     parser.add_argument('artists', type=str, nargs='+')
     parser.add_argument('--retrain', action='store_true', help='Retrain the model from the data files')
+    parser.add_argument('--ngrams', type=ngram_type, nargs='*', help='ngrams list for grid search')
+
 
     predicting_args_grp = parser.add_argument_group('Prediction functionality parameters', 'Parameters for predicting')
     predicting_args_grp.add_argument('--predict', action='store_true', help='Flag for song artist prediction')
     predicting_args_grp.add_argument('--song_files', type=str, nargs='+', help='Provide list of song files to predict the artists')
 
+    sgd_args_grp = parser.add_argument_group('Hyperparameters for sgd classifier', 'Hyperparameters for sgd classifier')
+    sgd_args_grp.add_argument('--alphas', type=float, nargs='*', help='List of alphas for sgd classifier')
+
     args = parser.parse_args()
 
+
+    # make sure that the predict is set than song_files should be provided
     if (args.predict and not args.song_files) or (args.song_files and not args.predict):
         parser.error("Args --songs and --predict must occur together")
 
@@ -39,7 +53,7 @@ if __name__ == "__main__":
     if not os.path.exists(model_filepath) or args.retrain :
 
         artist_dfs = extract_songs(artists, data_folder)
-        sgd_grid_search_clf = get_sgd_trained_model(model_filepath, artist_dfs, True)
+        sgd_grid_search_clf = get_sgd_trained_model(model_filepath, artist_dfs, True, ngram_ranges=args.ngrams, alphas=args.alphas)
 
     else :
         sgd_grid_search_clf = get_sgd_trained_model(model_filepath)

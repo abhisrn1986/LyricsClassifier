@@ -35,9 +35,7 @@ def get_train_test_data(artist_dfs):
         return train_test_split(X,y_true, random_state=LYRICS_COM_RANDOM_STATE, train_size=0.8)
 
 
-
-
-def get_sgd_trained_model(model_filepath, artist_dfs=[], retrain=False, ngram_ranges = [(1, 1), (1, 2), (1,3)], alphas = (1e-2, 1e-3, 1e-4), max_iters=[5,10,100,1000]):
+def get_sgd_trained_model(model_filepath, artist_dfs=[], retrain=False, ngram_ranges = [(1, 1), (1, 2), (1,3)], alphas = [1e-2, 1e-3, 1e-4], max_iters=[5,10,100,1000]):
     # Create the lyrics data base
     if retrain :
 
