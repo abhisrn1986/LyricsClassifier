@@ -2,8 +2,9 @@ import re
 import os
 import pandas as pd
 import threading
-import bs4 as BeautifulSoup
+from bs4 import BeautifulSoup
 import requests
+
 
 def extract_lyrics_from_url(url, songs, i):
 
@@ -51,17 +52,19 @@ def extract_artist_songs(artist):
 
     return songs_df
 
-def extract_songs(artists, songs_folder) :
+
+def extract_songs(artists, songs_folder, redownload=False):
     # Extract the songs to data frames if there is a csv file else
     # web scrape the songs from the lyrics.com
     artists_dfs = []
-    for i, artist in enumerate(artists) :
+    for i, artist in enumerate(artists):
         artist_filename = re.sub('[ -]{1}', "_", artist).lower() + '.csv'
         artist_filepath = songs_folder + artist_filename
-        if os.path.exists(artist_filepath) :
+        if os.path.exists(artist_filepath) and not redownload:
             artists_dfs.append(pd.read_csv(artist_filepath))
-        else :
-            artists_dfs.append(extract_artist_songs(re.sub('[ _]{1}', "-", artist).lower()))
+        else:
+            artists_dfs.append(extract_artist_songs(
+                re.sub('[ _]{1}', "-", artist).lower()))
             artists_dfs[-1].to_csv(artist_filepath)
-    
+
     return artists_dfs
