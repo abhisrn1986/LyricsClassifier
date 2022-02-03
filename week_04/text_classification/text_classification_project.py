@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     parser.add_argument('artists', type=str, nargs='+')
     parser.add_argument('--retrain', action='store_true', help='Retrain the model from the data files')
-    parser.add_argument('--ngrams', type=ngram_type, nargs='*', help='ngrams list for grid search')
+    parser.add_argument('--ngrams', type=ngram_type, nargs='+', default=[(1,1), (1,2)], help='ngrams list for grid search')
 
 
     predicting_args_grp = parser.add_argument_group('Prediction functionality parameters', 'Parameters for predicting')
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     predicting_args_grp.add_argument('--song_files', type=str, nargs='+', help='Provide list of song files to predict the artists')
 
     sgd_args_grp = parser.add_argument_group('Hyperparameters for sgd classifier', 'Hyperparameters for sgd classifier')
-    sgd_args_grp.add_argument('--alphas', type=float, nargs='*', help='List of alphas for sgd classifier')
+    sgd_args_grp.add_argument('--alphas', type=float, nargs='+',default=[1e-2, 1e-3], help='List of alphas for sgd classifier')
 
     args = parser.parse_args()
 
