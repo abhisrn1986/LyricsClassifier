@@ -18,11 +18,11 @@ if __name__ == "__main__":
                                     " by the two artists")
 
     parser.add_argument('artists', type=str, nargs='+')
-    parser.add_argument('--retrain', action='store_true', help='Retrain the model')
+    parser.add_argument('--retrain', action='store_true', help='Retrain the model from the data files')
 
-    predicting_args_grp = parser.add_argument_group('prediction functionality parameters', 'parameters for predicting')
-    predicting_args_grp.add_argument('--predict', action='store_true', help='Predict the songs')
-    predicting_args_grp.add_argument('--song_files', type=str, nargs='+', help='Provide list of song files to predict')
+    predicting_args_grp = parser.add_argument_group('Prediction functionality parameters', 'Parameters for predicting')
+    predicting_args_grp.add_argument('--predict', action='store_true', help='Flag for song artist prediction')
+    predicting_args_grp.add_argument('--song_files', type=str, nargs='+', help='Provide list of song files to predict the artists')
 
     args = parser.parse_args()
 
