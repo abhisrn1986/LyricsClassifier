@@ -7,16 +7,17 @@ from sklearn.metrics import accuracy_score
 
 import pandas as pd
 import pickle
+import logging
 
 
 LYRICS_COM_RANDOM_STATE = 42
 
 
 def print_hypermaters_search_results(results):
-    print('BEST MODEL PARAMETERS: {}\n'.format(results.best_params_))
+    logging.info('\nBEST MODEL PARAMETERS: {}\n'.format(results.best_params_))
     means = results.cv_results_['mean_test_score']
     for mean, params in zip(means, results.cv_results_['params']):
-        print('{}  for {}'.format(round(mean, 4), params))
+        logging.info('{}  for {}'.format(round(mean, 4), params))
 
 
 def get_train_test_data(artist_dfs):
@@ -58,7 +59,7 @@ def get_sgd_trained_model(model_filepath, artist_dfs=[], retrain=False, ngram_ra
         sgd_grid_search_clf.fit(X_train, y_train)
         print_hypermaters_search_results(sgd_grid_search_clf)
         pickle.dump(sgd_grid_search_clf, open(model_filepath, 'wb'))
-        print(sgd_grid_search_clf.score(X_test, y_test))
+        logging.info("\nModel Accuracy: {}".format(sgd_grid_search_clf.score(X_test, y_test)))
         return sgd_grid_search_clf
 
     else:
