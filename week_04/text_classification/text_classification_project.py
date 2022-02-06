@@ -1,6 +1,8 @@
+from xml.parsers.expat import model
 import pandas as pd
 import re
 import os.path
+from os import mkdir
 import argparse
 import logging
 
@@ -59,7 +61,12 @@ if __name__ == "__main__":
     artists = args.artists
 
     model_filename = re.sub('[ -]', '_', ''.join(artists)) + ".sav"
-    model_filepath = data_folder + "models/" + model_filename
+
+    models_dir = os.path.join(data_folder, "models")
+    if not os.path.exists(models_dir) :
+        mkdir(models_dir)
+
+    model_filepath = models_dir + model_filename
 
 
     # Check if there is a already a model saved for the artists combination
@@ -74,13 +81,18 @@ if __name__ == "__main__":
         sgd_grid_search_clf = get_sgd_trained_model(model_filepath)
 
     # predict the artist of the songs provided by the song files
+    default_songs_dir = os.path.join(data_folder, "songs/")
+    if not os.path.exists(default_songs_dir) :
+        mkdir(default_songs_dir)
+
+
     if args.predict:
         song_abs_filepaths = []
         for filepath in args.song_files:
             if os.path.exists(filepath):
                 song_abs_filepaths.append(filepath)
             else:
-                song_abs_filepaths.append(dir_path+filepath)
+                song_abs_filepaths.append(default_songs_dir+filepath)
 
         # Create the test set from songs files provided
         file_songs = pd.Series([open(filepath, "r").read()
