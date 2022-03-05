@@ -58,8 +58,10 @@ def get_sgd_trained_model(model_filepath, artist_dfs=[], retrain=False, ngram_ra
             sgd_classifying_pipeline, sgd_parameters, cv=5, n_jobs=-1, scoring='accuracy')
         sgd_grid_search_clf.fit(X_train, y_train)
         print_hypermaters_search_results(sgd_grid_search_clf)
-        pickle.dump(sgd_grid_search_clf, open(model_filepath, 'wb'))
-        logging.info("\nModel Accuracy: {}".format(sgd_grid_search_clf.score(X_test, y_test)))
+        with open(model_filepath, 'wb') as f:
+            pickle.dump(sgd_grid_search_clf, f)
+        logging.info("\nModel Accuracy: {}".format(
+            sgd_grid_search_clf.score(X_test, y_test)))
         return sgd_grid_search_clf
 
     else:
