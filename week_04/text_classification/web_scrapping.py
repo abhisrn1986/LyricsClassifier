@@ -1,13 +1,14 @@
 import re
 import os
-import pandas as pd
+import logging
 import threading
+from tqdm import tqdm
+
+import pandas as pd
+
 from bs4 import BeautifulSoup
 import requests
 from sqlalchemy import desc
-from tqdm import tqdm
-import threading
-import logging
 
 
 class AtomicTqdm(tqdm):
@@ -15,9 +16,9 @@ class AtomicTqdm(tqdm):
         super().__init__(*args, **kargs)
         self._lock = threading.Lock()
 
-    def update(self):
+    def update(self, n=1):
         with self._lock:
-            super().update(n=1)
+            super().update(n)
 
 
 def extract_lyrics_from_url(url, songs, i, parser_for_soup):
@@ -31,8 +32,8 @@ def extract_lyrics_from_url(url, songs, i, parser_for_soup):
     try:
         soup = BeautifulSoup(requests.get(url).text, parser_for_soup)
     except:
-        logging.warn("Exception occured while downloading from url: ",
-                     url, " skipping this song!")
+        logging.warn(f"Exception occured while downloading from url: "
+                     f"{url} skipping this song!")
     lyrics = ""
     lyrics_tag = soup.find('pre', attrs={'id': 'lyric-body-text'})
     if lyrics_tag:

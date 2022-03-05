@@ -1,20 +1,18 @@
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score
+import logging
+import pickle
 
 import pandas as pd
-import pickle
-import logging
 
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.linear_model import SGDClassifier
+from sklearn.pipeline import Pipeline
 
 LYRICS_COM_RANDOM_STATE = 42
 
 
 def print_hypermaters_search_results(results):
-    logging.info('\nBEST MODEL PARAMETERS: {}\n'.format(results.best_params_))
+    logging.info(f'\nBEST MODEL PARAMETERS: {results.best_params_}\n')
     means = results.cv_results_['mean_test_score']
     for mean, params in zip(means, results.cv_results_['params']):
         logging.info('{}  for {}'.format(round(mean, 4), params))
@@ -38,7 +36,7 @@ def get_train_test_data(artist_dfs):
     return train_test_split(X, y_true, random_state=LYRICS_COM_RANDOM_STATE, train_size=0.8)
 
 
-def get_sgd_trained_model(model_filepath, artist_dfs=[], retrain=False, ngram_ranges=[(1, 1), (1, 2), (1, 3)], alphas=[1e-2, 1e-3, 1e-4], max_iters=[5, 10, 100, 1000]):
+def get_sgd_trained_model(model_filepath, artist_dfs=None, retrain=False, ngram_ranges=[(1, 1), (1, 2), (1, 3)], alphas=[1e-2, 1e-3, 1e-4], max_iters=[5, 10, 100, 1000]):
     # Create the lyrics data base
     if retrain:
 
@@ -60,9 +58,10 @@ def get_sgd_trained_model(model_filepath, artist_dfs=[], retrain=False, ngram_ra
         print_hypermaters_search_results(sgd_grid_search_clf)
         with open(model_filepath, 'wb') as f:
             pickle.dump(sgd_grid_search_clf, f)
-        logging.info("\nModel Accuracy: {}".format(
-            sgd_grid_search_clf.score(X_test, y_test)))
+        logging.info(
+            f"\nModel Accuracy: {sgd_grid_search_clf.score(X_test, y_test)}")
         return sgd_grid_search_clf
 
     else:
-        return pickle.load(open(model_filepath, "rb"))
+        with open(model_filepath, "rb") as f:
+            return pickle.load(f)
