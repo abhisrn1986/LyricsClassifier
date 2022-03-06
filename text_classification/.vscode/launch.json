@@ -1,0 +1,68 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Predict Linkin Park and Imagine Dragon Songs",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["Linkin Park", "Imagine Dragons", "--predict", "--song_files", "imagine_dragons_warriors.txt", "linkin_park_given_up.txt" ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Predict Linkin Park and Imagine Dragon Songs with retrain",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["Linkin Park", "Imagine Dragons", "--predict", "--song_files", "imagine_dragons_warriors.txt", "linkin_park_given_up.txt", "--retrain" ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Predict No Songs",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["Linkin Park", "Imagine Dragons", "ColdPlay", "--predict"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Predict Linkin Park, Imagine Dragon Songs and ColdPlay",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["Linkin Park", "Imagine Dragons", "ColdPlay", "--retrain", "--predict", "--song_files", "imagine_dragons_warriors.txt", "linkin_park_given_up.txt", "coldplay_magic.txt" ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Help Check",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["--help" ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Check hyperparameters",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["Linkin Park", "Imagine Dragons", "ColdPlay", 
+                "--retrain", "--predict", "--song_files", 
+                "imagine_dragons_warriors.txt", "linkin_park_given_up.txt", 
+                "coldplay_magic.txt", "--ngrams", "1,1", "1,3", "--alphas", "1e-2", "1e-4" ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Predict Linkin Park and Imagine Dragon redownload Songs",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["Linkin Park", "Imagine Dragons", "--predict", "--song_files", "imagine_dragons_warriors.txt", "linkin_park_given_up.txt", "--download", "--retrain" ],
+            "console": "integratedTerminal"
+        }
+        
+    ]
+}
