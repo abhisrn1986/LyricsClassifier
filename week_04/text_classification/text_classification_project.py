@@ -12,7 +12,7 @@ from web_scrapping import extract_songs
 
 # Initialize the data folder to store the model and lyrics files
 dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
-data_folder = os.path.realpath(dir_path+"../"+"data/") + "/"
+data_folder = os.path.realpath(dir_path+"/"+"data/") + "/"
 
 # specify the logging level
 logging.basicConfig(encoding='utf-8', level=logging.INFO)
